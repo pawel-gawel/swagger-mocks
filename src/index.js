@@ -1,11 +1,11 @@
 const path = require('path');
 const { Server } = require('swagger-server');
 const {
+  yamlPath,
+  dataPath,
   mockedDataLoader,
   middlewareErrorHandler
 } = require('./utils');
-
-const yamlPath = process.env.SWAGGER_MOCKS_YAML_PATH || path.join(__dirname, '../', 'api.yaml');
 
 const server = new Server();
 server.parse(yamlPath);
@@ -13,7 +13,7 @@ server.parse(yamlPath);
 mockedDataLoader
   .server(server)
   .yaml(yamlPath)
-  .path(path.resolve(__dirname, '../mocked-data'))
+  .path(dataPath)
   .load();
 
 server.use(middlewareErrorHandler);

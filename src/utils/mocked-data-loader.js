@@ -42,7 +42,8 @@ function load() {
 function traverseDir(dir) {
   fs.readdirSync(dir)
     .forEach((file) => {
-      const filePath = path.join(dir, file);
+      const filePath = path.resolve(dir, file);
+      console.log('mocked data found:', filePath)
       if (fs.lstatSync(filePath).isDirectory()) {
         traverseDir(filePath);
       } else {
