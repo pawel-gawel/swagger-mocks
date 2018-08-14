@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "author": [
+    "Paweł Kornijów"
+  ],
   "config": {
     "port": 3003
   },
