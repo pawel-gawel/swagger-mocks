@@ -1,0 +1,276 @@
+swagger: '2.0'
+info:
+  title: Paytollo Automatic Facet API
+  version: '1.0.0'
+basePath: /v1
+tags:
+- name: vehicle
+  description: vehicles data
+- name: user
+  description: getting information about authenticated user
+schemes:
+- http
+paths:
+  /user:
+    get:
+      tags:
+      - user
+      summary: Retrieve information about logged user
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        403:
+          description: Unauthorized
+  /user/info:
+    get:
+      tags:
+      - user
+      summary: Retrieve information about logged user, like balance, credit card, etc.
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/UserInfo'
+  /vehicles/{vehicleId}:
+    get:
+      tags: 
+      - vehicle
+      summary: Retrieve Vehicle object with given ID
+      parameters: 
+      - name: vehicleId
+        in: path
+        description: ID of vehicle to retrieve
+        required: true
+        type: string
+      produces:
+       - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Vehicle'
+  /vehicles/{vehicleId}/connection:
+    post:
+      tags:
+        - vehicle
+      summary: Create vehicle connection with paytollo service
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: License plate of vehicle to connect
+          schema:
+            type: object
+            required:
+              - licensePlate
+            properties:
+              licensePlate:
+                type: string
+                example: 'LU 00001'
+        - name: vehicleId
+          in: path
+          description: ID of vehicle to connect
+          required: true
+          type: string
+      responses:
+        '201':
+          description: Created
+  /vehicles:
+    get:
+      tags: 
+      - vehicle
+      summary: Retrieve list of vehicles owned by user
+      produces:
+       - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Vehicles'
+  /payments:
+    get:
+      tags: 
+      - vehicle
+      summary: Retrieve pending or history payments object for vehicle
+      parameters: 
+        - in: query
+          name: category
+          type: string
+          enum: [pending, history]
+          description: Category name to filter results by
+        - in: query
+          name: vehicle_id__in
+          type: array
+          items:
+            type: string
+          description: Comma delimited vehicle ids to filter results by
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/PaymentsWrapper'
+definitions:
+  User:
+    type: object
+    required:
+    - id
+    - username
+    properties:
+      id:
+        type: string
+        example: '007'
+      username:
+        type: string
+        example: HanSolo
+  UserInfo:
+    type: object
+    required:
+    - isPaymentSet
+    - balance
+    - credidCard
+    properties:
+      isPaymentSet:
+        type: boolean
+        example: true
+      balance: 
+        type: integer
+        example: 12.4
+      creditCard:
+        type: string
+        example: 'XXXX ... 1234'
+  Vehicle:
+    type: object
+    required:
+    - id
+    - displayName
+    - isConnected
+    properties:
+      id:
+        type: string
+        example: VW001
+      displayName:
+        type: string
+        example: 'Family Car'
+      isConnected:
+        type: boolean
+        example: true
+      pendingPayments:
+        type: integer
+        example: 1
+      totalAmountPaid:
+        type: number
+        example: 172.8
+      tollsPaid:
+        type: integer
+        example: 213
+    default:
+      id: DEFAULT_VEHICLE
+      totalAmountPaid: 9.99
+      tollsPaid: 999
+  Vehicles:
+    type: array
+    items:
+      $ref: '#/definitions/Vehicle'
+  Payment:
+    type: object
+    required:
+    - vehicleId
+    - amount
+    - location
+    - date
+    properties:
+      id:
+        type: string
+        example: P0001
+      vehicleId:
+        type: string
+        example: VW001
+      amount:
+        type: number
+        example: 1.2
+      location:
+        type: string
+        example: John Young Parkway
+      date:
+        type: string
+        example: 2018-02-19T10:12:00
+  PaymentsWrapper:
+    type: object
+    required:
+    - _metadata
+    - results
+    properties:
+      _metadata:
+        $ref: '#/definitions/ListMetadata'
+      results:
+        $ref: '#/definitions/Payments'
+    example:
+      _metadata: 
+        count: 2
+        next: null
+        previous: null
+      results:
+      - id: P0001
+        vehicleId: VW001
+        location: Orlando South (US 17/92/441)
+        amount: 1.2
+        date: 2018-02-14T15:23:00
+      - id: P0002
+        vehicleId: VW001
+        location: Lake Nona Blvd.
+        amount: 2.3
+        date: 2018-02-14T15:23:00
+      - id: P0003
+        vehicleId: VW001
+        location: Semoran Blvd. WB
+        amount: 2.9
+        date: 2018-02-14T15:23:00
+      - id: P0004
+        vehicleId: VW001
+        location: Catskill - Cairo - NY Route 23 Exit
+        amount: 0.8
+        date: 2018-02-14T15:23:00
+  ListMetadata:
+    type: object
+    required:
+    - count
+    properties:
+      count:
+        type: integer
+        example: 2
+      next:
+        type: string
+        example: null
+      previous:
+        type: string
+        example: null
+  Payments:
+    type: array
+    items:
+      $ref: '#/definitions/Payment'
+    example:
+      - id: P0001
+        vehicleId: VW001
+        location: Orlando South (US 17/92/441)
+        amount: 1.2
+        date: 2018-02-14T15:23:00
+      - id: P0002
+        vehicleId: VW001
+        location: Lake Nona Blvd.
+        amount: 2.3
+        date: 2018-02-14T15:23:00
+      - id: P0003
+        vehicleId: VW001
+        location: Semoran Blvd. WB
+        amount: 2.9
+        date: 2018-02-14T15:23:00
+      - id: P0004
+        vehicleId: VW001
+        location: Catskill - Cairo - NY Route 23 Exit
+        amount: 0.8
+        date: 2018-02-14T15:23:00
+
+  
