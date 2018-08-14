@@ -1,0 +1,21 @@
+[
+  {
+    "name": "",
+    "data": {
+      "_metadata": {
+        "count": 1,
+        "next": null,
+        "previous": null
+      },
+      "results": [
+        {
+          "id": "P0001",
+          "vehicleId": "C_789",
+          "location": "Orlando South (US 17/92/441)",
+          "amount": 1.5,
+          "date": "2018-02-14T15:23:00"
+        }
+      ]
+    }
+  }
+]

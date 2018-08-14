@@ -50,7 +50,7 @@ WARNING! Unable to find a Swagger path that matches "/non/existent/path"
 
 ## Swagger default data
 
-One can define default data structure to each definition in swagger file, leveraging `default` section. This structure will be returned by the server whenever path matches and there is no mocked data for specific path. This will also allow 405 errors.
+One can define default data structure to each definition in swagger file, leveraging `default` or `wxample` section. This structure will be returned by the server whenever path matches and there is no mocked data for specific path. This will also allow 405 errors.
 
 Example:
 
@@ -81,6 +81,16 @@ definitions:
       totalAmountPaid: 9.99
       tollsPaid: 999
 ```
+
+For more examples you can look into `api.yaml` file as well as `mocked-data/` directory, which are a part of this repo.
+
+> When running with examplary files, issue commands listed below (assuming default port number) and refer to appropriate `mocked-data` files as well as `default`/`example` sections in `api.yaml` file to understand what is going on.
+>
+> `curl localhost:3003/v1/vehicles` - to get the list of vehicles defined in `mocked-data/vehicles.json`,
+> `curl localhost:3003/v1/vehicles/C_123` - for server to return vehicle with name of `C_123` from `mocked-data/vehicles.json`,
+> `curl localhost:3003/v1/vehicles/nonExistentKey` - to get single vehicle from `default` section of appropriate yaml definition,
+> `curl localhost:3003/v1/no-mocked-data` - to experience 405 response due to lack of both `default`/`example` section for `NoMockedData` definition as well as matching json file in `mocked-data/` directory,
+> `curl localhost:3003/v1/non-existent-path` - to experience 404 response.
 
 ## Mocked data format
 

@@ -11,6 +11,13 @@ tags:
 schemes:
 - http
 paths:
+  /no-mocked-data:
+    get:
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/NoMockedData'
   /user:
     get:
       tags:
@@ -23,16 +30,6 @@ paths:
             $ref: '#/definitions/User'
         403:
           description: Unauthorized
-  /user/info:
-    get:
-      tags:
-      - user
-      summary: Retrieve information about logged user, like balance, credit card, etc.
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/UserInfo'
   /vehicles/{vehicleId}:
     get:
       tags: 
@@ -51,33 +48,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Vehicle'
-  /vehicles/{vehicleId}/connection:
-    post:
-      tags:
-        - vehicle
-      summary: Create vehicle connection with paytollo service
-      consumes:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: License plate of vehicle to connect
-          schema:
-            type: object
-            required:
-              - licensePlate
-            properties:
-              licensePlate:
-                type: string
-                example: 'LU 00001'
-        - name: vehicleId
-          in: path
-          description: ID of vehicle to connect
-          required: true
-          type: string
-      responses:
-        '201':
-          description: Created
   /vehicles:
     get:
       tags: 
@@ -113,6 +83,10 @@ paths:
           schema:
             $ref: '#/definitions/PaymentsWrapper'
 definitions:
+  NoMockedData:
+    type: object
+    properties:
+      nothing: boolean
   User:
     type: object
     required:
@@ -125,22 +99,6 @@ definitions:
       username:
         type: string
         example: HanSolo
-  UserInfo:
-    type: object
-    required:
-    - isPaymentSet
-    - balance
-    - credidCard
-    properties:
-      isPaymentSet:
-        type: boolean
-        example: true
-      balance: 
-        type: integer
-        example: 12.4
-      creditCard:
-        type: string
-        example: 'XXXX ... 1234'
   Vehicle:
     type: object
     required:
