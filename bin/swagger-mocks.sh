@@ -1,6 +1,7 @@
 #!/bin/bash
 
-root_dir="$(dirname "$0")/"
+root_dir="$(dirname $(realpath $0))/../"
+
 yaml=${1:-'api.yaml'}
 data=${2:-'mocked-data'}
 
