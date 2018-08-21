@@ -8,8 +8,14 @@ usage() {
   printf "\n\tUsage: swagger-mocks [-hv] [path/to/yaml/file] [path/to/mocked/data/dir]\n\n" >&2; exit 1
 }
 
-while getopts ":hv" o; do
+while getopts ":hvf:m:" o; do
   case "${o}" in
+    f)
+      yaml=${OPTARG}
+      ;;
+    m)
+      data=${OPTARG}
+      ;;
     h)
       usage
       ;;
