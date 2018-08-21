@@ -1,5 +1,6 @@
 #!/bin/bash
 
+root_dir="$(dirname "$0")/"
 yaml=${1:-'api.yaml'}
 data=${2:-'mocked-data'}
 
@@ -24,4 +25,4 @@ shift $((OPTIND-1))
 
 SWAGGER_MOCKS_YAML_PATH=$yaml \
 SWAGGER_MOCKS_DATA_PATH=$data \
-node src/index.js
+node ${root_dir}/src/index.js
