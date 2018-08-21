@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "author": [
-    "Paweł Kornijów"
-  ],
+  "author": "Paweł Kornijów",
   "config": {
     "port": 3003
   },
@@ -15,7 +13,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "swagger-server": "^1.0.0-alpha.19"
