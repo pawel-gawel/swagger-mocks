@@ -1,9 +1,4 @@
-[
-  {
-    "name": "",
-    "data": {
-      "id": "007",
-      "username": "HanSolo"
-    }
-  }
-]
+{
+  "id": "007",
+  "username": "HanSolo"
+}

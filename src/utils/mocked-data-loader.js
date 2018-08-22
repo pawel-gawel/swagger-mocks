@@ -1,5 +1,5 @@
 const loader = {
-  path: setPath,
+  mocks: setMocks,
   server,
   yaml: parseYaml,
   load
@@ -17,7 +17,7 @@ let serverInstance;
 let dirPath;
 let yamlDefinitions;
 
-function setPath(val) {
+function setMocks(val) {
   dirPath = val;
   return loader;
 }
@@ -33,7 +33,7 @@ function parseYaml(filePath) {
 }
 
 function load() {
-  assert(dirPath, 'No mocked data directory defined. Use path() method.');
+  assert(dirPath, 'No mocked data directory defined. Use mocks() method.');
   assert(serverInstance, 'No swagger server instance defined. Use server() method.');
   traverseDir(dirPath);
   return loader;

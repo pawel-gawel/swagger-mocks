@@ -13,7 +13,7 @@ server.parse(yamlPath);
 mockedDataLoader
   .server(server)
   .yaml(yamlPath)
-  .path(dataPath)
+  .mocks(dataPath)
   .load();
 
 server.use(middlewareErrorHandler);

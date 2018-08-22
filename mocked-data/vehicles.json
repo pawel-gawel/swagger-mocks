@@ -1,21 +1,15 @@
 [
   {
-    "name": "C_456",
-    "data": {
-      "vehicleId": "C_456",
-      "displayName": "Lamborghini Murcielago",
-      "isConnected": false
-    }
+    "id": "C_456",
+    "displayName": "Lamborghini Murcielago",
+    "isConnected": false
   },
   {
-    "name": "C_123",
-    "data": {
-      "vehicleId": "C_123",
-      "displayName": "Family Car",
-      "isConnected": true,
-      "pendingPayments": 1,
-      "totalAmountPaid": 9.99,
-      "tollsPaid": 123
-    }
+    "id": "C_123",
+    "displayName": "Family Car",
+    "isConnected": true,
+    "pendingPayments": 1,
+    "totalAmountPaid": 9.99,
+    "tollsPaid": 123
   }
 ]
