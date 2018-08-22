@@ -1,6 +1,5 @@
 const loader = {
   mocks: setMocks,
-  server,
   yaml: parseYaml,
   load
 };
@@ -11,19 +10,16 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 const assert = require('assert');
-const { Resource } = require('swagger-server');
+const swagger = require('swagger-express-middleware');
+const { Middleware, MemoryDataStore, Resource } = swagger;
 
-let serverInstance;
+const myDB = new MemoryDataStore();
+
 let dirPath;
 let yamlDefinitions;
 
 function setMocks(val) {
   dirPath = val;
-  return loader;
-}
-
-function server(val) {
-  serverInstance = val;
   return loader;
 }
 
@@ -34,9 +30,9 @@ function parseYaml(filePath) {
 
 function load() {
   assert(dirPath, 'No mocked data directory defined. Use mocks() method.');
-  assert(serverInstance, 'No swagger server instance defined. Use server() method.');
+  // assert(serverInstance, 'No swagger server instance defined. Use server() method.');
   traverseDir(dirPath);
-  return loader;
+  return myDB;
 }
 
 function traverseDir(dir) {
@@ -47,7 +43,7 @@ function traverseDir(dir) {
         traverseDir(filePath);
       } else {
         const uri = getUri(file);
-        serverInstance.dataStore.save(new Resource(getUri(file), require(filePath)));
+        myDB.save(new Resource(getUri(file), require(filePath)));
         console.log('mocked data found: %s -> mapped to %s', filePath, uri);
       }
     });
