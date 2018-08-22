@@ -12,24 +12,22 @@ const {
 const express = require('express');
 const middleware = require('swagger-express-middleware');
 const app = express();
+const port = process.env.SWAGGER_SERVER_PORT || require('../package').config.port;
 
 middleware(yamlPath, app, function(err, middleware) {
-    // Add all the Swagger Express Middleware, or just the ones you need.
-    // NOTE: Some of these accept optional options (omitted here for brevity)
     app.use(
-        middleware.metadata(),
-        middleware.CORS(),
-        middleware.parseRequest(),
-        middleware.validateRequest(),
-        middleware.mock(
-          mockedDataLoader
-            .yaml(yamlPath)
-            .mocks(dataPath)
-            .load()
-        )
+      middleware.metadata(),
+      middleware.CORS(),
+      middleware.parseRequest(),
+      middleware.validateRequest(),
+      middleware.mock(
+        mockedDataLoader
+          .yaml(yamlPath)
+          .mocks(dataPath)
+          .load()
+      ),
+      middlewareErrorHandler
     );
-
-    const port = process.env.SWAGGER_SERVER_PORT || require('../package').config.port;
 
     app.listen(port, function() {
         console.log('listening on %s...', port);
