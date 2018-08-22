@@ -3,10 +3,10 @@
 root_dir="$(dirname $(realpath $0))/../"
 
 yaml=${1:-'api.yaml'}
-data=${2:-'mocked-data'}
+mocksPath=${2}
 
 usage() {
-  printf "\n\tUsage: swagger-mocks [-hv] [path/to/yaml/file] [path/to/mocked/data/dir]\n\n" >&2; exit 1
+  printf "\n\tUsage: swagger-mocks [-hv] path/to/yaml/file [path/to/mocked/data/dir]\n\n" >&2; exit 1
 }
 
 while getopts ":hvf:m:" o; do
@@ -15,7 +15,7 @@ while getopts ":hvf:m:" o; do
       yaml=${OPTARG}
       ;;
     m)
-      data=${OPTARG}
+      mocksPath=${OPTARG}
       ;;
     h)
       usage
@@ -31,5 +31,5 @@ done
 shift $((OPTIND-1))
 
 SWAGGER_MOCKS_YAML_PATH=$yaml \
-SWAGGER_MOCKS_DATA_PATH=$data \
+SWAGGER_MOCKS_DATA_PATH=$mocksPath \
 node ${root_dir}/src/index.js
