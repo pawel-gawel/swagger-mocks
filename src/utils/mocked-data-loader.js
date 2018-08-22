@@ -30,23 +30,20 @@ function parseYaml(filePath) {
 
 function load() {
   assert(mocksPath, 'No mocked data directory defined. Use mocks() method.');
-  traverseDir(mocksPath);
+  traverse(mocksPath);
   return myDB;
 }
 
-function traverseDir(dir) {
-  fs.readdirSync(dir)
-    .forEach((file) => {
-      const filePath = path.resolve(dir, file);
-      if (fs.lstatSync(filePath).isDirectory()) {
-        traverseDir(filePath);
-      } else {
-        const relativeFilePath = path.relative(mocksPath, filePath);
-        const uri = getUri(relativeFilePath);
-        myDB.save(new Resource(uri, require(filePath)));
-        console.log('mocked data found: %s -> mapped to %s', relativeFilePath, uri);
-      }
-    });
+function traverse(entry) {
+  if (fs.lstatSync(entry).isDirectory()) {
+    fs.readdirSync(entry)
+      .forEach((file) => traverse(path.resolve(entry, file)));
+  } else {
+    const relativeFilePath = path.relative(mocksPath, entry);
+    const uri = getUri(relativeFilePath);
+    myDB.save(new Resource(uri, require(entry)));
+    console.log('mocked data found: %s -> mapped to %s', relativeFilePath, uri);
+  }
 }
 
 function getUri(filePath) {

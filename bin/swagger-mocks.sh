@@ -2,7 +2,7 @@
 
 root_dir="$(dirname $(realpath $0))/../"
 
-yaml=${1:-'api.yaml'}
+yamlPath=${1}
 mocksPath=${2}
 
 usage() {
@@ -12,7 +12,7 @@ usage() {
 while getopts ":hvf:m:" o; do
   case "${o}" in
     f)
-      yaml=${OPTARG}
+      yamlPath=${OPTARG}
       ;;
     m)
       mocksPath=${OPTARG}
@@ -30,6 +30,6 @@ while getopts ":hvf:m:" o; do
 done
 shift $((OPTIND-1))
 
-SWAGGER_MOCKS_YAML_PATH=$yaml \
+SWAGGER_MOCKS_YAML_PATH=$yamlPath \
 SWAGGER_MOCKS_DATA_PATH=$mocksPath \
 node ${root_dir}/src/index.js
