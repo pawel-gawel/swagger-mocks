@@ -15,11 +15,11 @@ const { Middleware, MemoryDataStore, Resource } = swagger;
 
 const myDB = new MemoryDataStore();
 
-let dirPath;
+let mocksPath;
 let yamlDefinitions;
 
 function setMocks(val) {
-  dirPath = val;
+  mocksPath = val;
   return loader;
 }
 
@@ -29,9 +29,8 @@ function parseYaml(filePath) {
 }
 
 function load() {
-  assert(dirPath, 'No mocked data directory defined. Use mocks() method.');
-  // assert(serverInstance, 'No swagger server instance defined. Use server() method.');
-  traverseDir(dirPath);
+  assert(mocksPath, 'No mocked data directory defined. Use mocks() method.');
+  traverseDir(mocksPath);
   return myDB;
 }
 
@@ -42,16 +41,17 @@ function traverseDir(dir) {
       if (fs.lstatSync(filePath).isDirectory()) {
         traverseDir(filePath);
       } else {
-        const uri = getUri(file);
-        myDB.save(new Resource(getUri(file), require(filePath)));
-        console.log('mocked data found: %s -> mapped to %s', filePath, uri);
+        const relativeFilePath = path.relative(mocksPath, filePath);
+        const uri = getUri(relativeFilePath);
+        myDB.save(new Resource(uri, require(filePath)));
+        console.log('mocked data found: %s -> mapped to %s', relativeFilePath, uri);
       }
     });
 }
 
-function getUri(filename) {
-  let [name] = filename.split('.');
-  let uri = '/'.concat(name.split('_').join('/'));
+function getUri(filePath) {
+  let [uri] = filePath.split('.');
+  uri = '/'.concat(uri);
   if (yamlDefinitions && yamlDefinitions.basePath) {
     uri = yamlDefinitions.basePath.concat(uri);
   }
