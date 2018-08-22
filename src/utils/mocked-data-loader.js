@@ -43,38 +43,21 @@ function traverseDir(dir) {
   fs.readdirSync(dir)
     .forEach((file) => {
       const filePath = path.resolve(dir, file);
-      console.log('mocked data found:', filePath)
       if (fs.lstatSync(filePath).isDirectory()) {
         traverseDir(filePath);
       } else {
-        const json = require(filePath)
-          .map(normalizeResource)
-          .map(applyCollectionName(file))
-          .map(applyCollectionPrefix);
-
-        serverInstance.dataStore.save(Resource.parse(json));
+        const uri = getUri(file);
+        serverInstance.dataStore.save(new Resource(getUri(file), require(filePath)));
+        console.log('mocked data found: %s -> mapped to %s', filePath, uri);
       }
     });
 }
 
-function normalizeResource(res) {
-  if (!('data' in res)) {
-    return { data: res };
-  }
-  return res;
-}
-
-function applyCollectionName(filename) {
+function getUri(filename) {
   let [name] = filename.split('.');
-  name = name.split('-').join('/');
-
-  return (resource) => ({ collection: `/${name}`, ...resource });
-}
-
-function applyCollectionPrefix(resource) {
+  let uri = '/'.concat(name.split('_').join('/'));
   if (yamlDefinitions && yamlDefinitions.basePath) {
-    return { ...resource, collection: `${yamlDefinitions.basePath}${resource.collection}` };
+    uri = yamlDefinitions.basePath.concat(uri);
   }
-  return resource;
+  return uri;
 }
-
