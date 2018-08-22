@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 
 const {
   yamlPath,
@@ -12,6 +13,11 @@ const middleware = require('swagger-express-middleware');
 const app = express();
 const port = process.env.SWAGGER_SERVER_PORT || require('../package').config.port;
 const mocksPath = process.env.SWAGGER_MOCKS_DATA_PATH;
+
+if (!fs.existsSync(yamlPath)) {
+  console.error(`\nSwagger definition file ${yamlPath} does not exist!\n`);
+  process.exit(1);
+}
 
 middleware(yamlPath, app, function(err, middleware) {
     app.use(

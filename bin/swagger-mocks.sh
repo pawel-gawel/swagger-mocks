@@ -9,6 +9,11 @@ usage() {
   printf "\n\tUsage: swagger-mocks [-hv] path/to/yaml/file [path/to/mocked/data/dir]\n\n" >&2; exit 1
 }
 
+if [ -z $yamlPath ]; then
+  usage 1>&2;
+  exit
+fi
+
 while getopts ":hvf:m:" o; do
   case "${o}" in
     f)
