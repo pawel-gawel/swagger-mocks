@@ -5,7 +5,7 @@ This package is a wrapper around `swagger-server` library.
 ## Installation
 
 ```
-npm install -g @automatic-labs/swagger-mocks
+npm install --save-dev @pawk/swagger-mocks
 ```
 
 ## Terminal command
@@ -13,8 +13,13 @@ npm install -g @automatic-labs/swagger-mocks
 Whenever package is installed, there will be new terminal command abailable. Go with 
 
 ```
+# when installed globally
 swagger-mocks -h
+
+# when installed locally
+./node_modules/.bin/swagger-mocks -h
 ```
+
 to inspect its usage.
 
 Command takes two arguments:
@@ -27,7 +32,14 @@ for example
 swagger-mocks path/to/api.yaml path/to/mocks/
 ```
 
-Server will pick up files from directory and pipe them to output, whenever mocks for specified path exist.
+## Mocking
+
+Server will pick up files from mocks directory and pipe them to output, whenever mocks for specified path exist. It will map them to uris resembling directory structure relative to mocked path.
+
+> Example:
+>
+> File `mocksPath/users/john.json` will be mapped to `/users/john` uri.
+> Also, if there is a proper `/users/` path definition, it will return all the data mapped to `/users/` collection.
 
 If there is no data, but there is a path defined in swagger definitions, server will respond with 404.
 
