@@ -37,9 +37,9 @@ swagger-mocks path/to/api.yaml path/to/mocks/
 Server will pick up files from mocks directory and pipe them to output, whenever mocks for specified path exist. It will map them to uris resembling directory structure relative to mocked path.
 
 > Example:
->
 > File `mocksPath/users/john.json` will be mapped to `/users/john` uri.
 > Also, if there is a proper `/users/` path definition, it will return all the data mapped to `/users/` collection.
+> Mapped uris can have arbitrary prefix defined by `basePath` property defined in Swagger file - this is the case for the exemplary files described below.
 
 If there is no data, but there is a path defined in swagger definitions, server will respond with 404.
 
