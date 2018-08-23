@@ -8,7 +8,8 @@
     "port": 3003
   },
   "bin": {
-    "swagger-mocks": "bin/swagger-mocks.sh"
+    "swagger-mocks": "bin/swagger-mocks.sh",
+    "swagger-editor": "bin/swagger-editor.sh"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3",
+    "swagger": "^0.7.5",
     "swagger-express-middleware": "^1.0.0-alpha.12"
   }
 }
